@@ -185,7 +185,8 @@ class FireStoreUserDataControler extends GetxController {
         .orderBy(UserJsonKey.uid)
         .snapshots()
         .listen((event) async {
-      if (event.docs.last.data()[UserJsonKey.uid] != users.last.value.uid) {
+      if (event.docs.last.data()[UserJsonKey.uid] != users.last.value.uid ||
+          event.docs.isEmpty) {
         users.add((await getUserFromDataBase(
             event.docs.last.data()[UserJsonKey.uid]))!);
       }

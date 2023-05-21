@@ -12,6 +12,9 @@ class AppTextField extends StatefulWidget {
   final void Function(String value)? onChange;
   final void Function()? onSubmit;
   final BorderRadius? borderRedius;
+  final bool isOnDoneClear;
+  final TextInputType? inputType;
+  final TextInputAction? inputAction;
 
   const AppTextField(
       {super.key,
@@ -25,7 +28,10 @@ class AppTextField extends StatefulWidget {
       this.height,
       this.hintText,
       this.initialText,
-      this.borderRedius});
+      this.borderRedius,
+      this.isOnDoneClear = false,
+      this.inputType,
+      this.inputAction});
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -48,11 +54,13 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.initialText);
+    // editingControler.
     return Container(
       height: widget.height,
       margin: widget.margin,
       child: TextField(
+        textInputAction: widget.inputAction,
+        keyboardType: widget.inputType,
         style: const TextStyle(decoration: TextDecoration.none),
         controller: editingControler,
         obscureText: widget.ishide ?? false,
@@ -67,7 +75,14 @@ class _AppTextFieldState extends State<AppTextField> {
           prefixIcon: widget.prefixIcon,
         ),
         onChanged: widget.onChange,
-        onEditingComplete: widget.onSubmit,
+        onEditingComplete: () {
+          if (widget.isOnDoneClear) {
+            editingControler.text = "";
+          }
+          if (widget.onSubmit != null) {
+            widget.onSubmit!();
+          }
+        },
       ),
     );
   }

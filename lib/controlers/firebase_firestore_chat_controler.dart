@@ -44,7 +44,8 @@ class FireStoreChatControler extends GetxController {
             .orderBy(ChatJsonKey.dateTime, descending: false)
             .snapshots()
             .listen((event) {
-          if (chats.last.cid != event.docs.last.data()[ChatJsonKey.cid]) {
+          if (chats.last.cid != event.docs.last.data()[ChatJsonKey.cid] ||
+              chats.isEmpty) {
             chats.add(Chat.fromJson(event.docs.last.data()));
           }
           // for (final chat in event.docs) {

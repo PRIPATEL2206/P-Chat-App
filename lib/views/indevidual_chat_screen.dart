@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pchat/constants/key_constants.dart';
 import 'package:pchat/controlers/auth_controler.dart';
 import 'package:pchat/controlers/firebase_firestore_chat_controler.dart';
 import 'package:pchat/helper/route_helper.dart';
@@ -22,11 +21,12 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Chat Screen build");
+    // print("Chat Screen build");
     final chatControler = Get.find<FireStoreChatControler>();
     String chatText = "";
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: InkWell(
           onTap: () => gotoScreen(
             context: context,
@@ -66,16 +66,16 @@ class ChatScreen extends StatelessWidget {
                           builder: (controller) {
                             String prewusDate = "";
                             final todayDate =
-                                "${DateTime.now().year} / ${DateTime.now().month} / ${DateTime.now().day}";
+                                "${DateTime.now().day} / ${DateTime.now().month} / ${DateTime.now().year}";
                             return ListView.builder(
                               itemCount: chats.length,
                               itemBuilder: (context, index) {
                                 bool isDateShow = false;
                                 if (prewusDate !=
-                                        "${chats[index].dateTime.year} / ${chats[index].dateTime.month} / ${chats[index].dateTime.day}" &&
+                                        "${chats[index].dateTime.day} / ${chats[index].dateTime.month} / ${chats[index].dateTime.year}" &&
                                     prewusDate != "Today") {
                                   prewusDate =
-                                      "${chats[index].dateTime.month} / ${chats[index].dateTime.month} / ${chats[index].dateTime.day}";
+                                      "${chats[index].dateTime.day} / ${chats[index].dateTime.month} / ${chats[index].dateTime.year}";
                                   if (prewusDate == todayDate) {
                                     prewusDate = "Today";
                                   }
@@ -89,7 +89,8 @@ class ChatScreen extends StatelessWidget {
                                         chats[index].sendBy;
 
                                 return Container(
-                                  margin: const EdgeInsets.all(5),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 3, vertical: 3),
                                   child: Column(
                                     children: [
                                       isDateShow
@@ -100,7 +101,7 @@ class ChatScreen extends StatelessWidget {
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 15,
-                                                      vertical: 5),
+                                                      vertical: 6),
                                               decoration: BoxDecoration(
                                                   color: Colors.black87,
                                                   borderRadius:
@@ -109,10 +110,10 @@ class ChatScreen extends StatelessWidget {
                                               child: AppText(text: prewusDate),
                                             )
                                           : Container(),
-                                      Column(
-                                        crossAxisAlignment: isSendByCurrentUser
-                                            ? CrossAxisAlignment.end
-                                            : CrossAxisAlignment.start,
+                                      Row(
+                                        mainAxisAlignment: isSendByCurrentUser
+                                            ? MainAxisAlignment.end
+                                            : MainAxisAlignment.start,
                                         children: [
                                           Container(
                                             padding: const EdgeInsets.symmetric(
@@ -185,69 +186,29 @@ class ChatScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppTextField(
-                    hintText: "Massage",
-                    height: 40,
+                    inputAction: TextInputAction.send,
+                    // margin: EdgeInsets.zero,
                     onChange: (value) => chatText = value,
+                    hintText: "Massage",
+                    height: 50,
                   ),
                 ),
                 IconButton(
                     onPressed: () {
+                      // print(chatText.text);
                       chatControler.sendMessage(
                         groupId: group.value.gid,
                         message: chatText,
                         sendBy:
                             Get.find<AuthControler>().currentUser!.value.uid,
                       );
-                      chatText = "";
                     },
-                    icon: const Icon(size: 35, Icons.send)),
+                    icon: const Icon(size: 35, Icons.send_rounded)),
               ],
             ),
           )
         ]),
       ),
-      // body: Column(children: [
-      //   Expanded(
-      //     flex: 1,
-      //     child: ListView.builder(
-      //       itemCount: 30,
-      //       itemBuilder: (context, index) {
-      //         return ClipRect(
-      //           child: Container(
-      //             padding:
-      //                 const EdgeInsets.symmetric(horizontal: 3, vertical: 5),
-      //             decoration: const BoxDecoration(
-      //                 color: Colors.black54,
-      //                 borderRadius: BorderRadius.only(
-      //                   bottomLeft: Radius.circular(5),
-      //                   topLeft: Radius.circular(5),
-      //                   bottomRight: Radius.circular(5),
-      //                 )),
-      //             child: const AppText(text: "Massege"),
-      //           ),
-      //         );
-      //       },
-      //     ),
-      //   ),
-      //   Row(
-      //     children: [
-      //       AppTextField(
-      //         onChange: (value) => chatText = value,
-      //       ),
-      //       IconButton(
-      //           onPressed: () {
-      //             print(chatText);
-      //           },
-      //           icon: Container(
-      //             padding: const EdgeInsets.all(5),
-      //             child: const Icon(Icons.send),
-      //           )),
-      //     ],
-      //   ),
-      //   const SizedBox(
-      //     height: 3,
-      //   )
-      // ]),
     );
   }
 }

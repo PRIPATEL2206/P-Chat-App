@@ -16,12 +16,13 @@ class AddUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("add user Build");
+    // print("add user Build");
     final userControler = Get.find<FireStoreUserDataControler>();
     final groupControler = Get.find<FireStoreGroupDataControler>();
     final searchText = "".obs;
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         actions: [
           TextButton(
               onPressed: () => goBack(context),
@@ -64,11 +65,11 @@ class AddUserScreen extends StatelessWidget {
                                       uid: users[index].value.uid),
                               icon: isUserAdded
                                   ? const Icon(
-                                      Icons.minimize_rounded,
+                                      Icons.person_remove_outlined,
                                       color: Colors.red,
                                     )
                                   : const Icon(
-                                      Icons.add,
+                                      Icons.person_add_alt_outlined,
                                       color: Colors.green,
                                     )),
                           indexKey: users[index].value.uid,

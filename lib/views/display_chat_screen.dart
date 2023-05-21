@@ -17,7 +17,7 @@ class GroupDisplayScreen extends StatelessWidget {
   const GroupDisplayScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    print("display chat build");
+    // print("display chat build");
     AuthControler authControler = Get.find<AuthControler>();
     final groupControler = Get.find<FireStoreGroupDataControler>();
     final isSearch = false.obs;
@@ -33,6 +33,7 @@ class GroupDisplayScreen extends StatelessWidget {
       },
       child: Scaffold(
           appBar: AppBar(
+            elevation: 0,
             actions: [
               Obx(
                 () => isSearch.value

@@ -46,18 +46,21 @@ class RegisterScreen extends StatelessWidget {
                 onChange: (value) => userName = value,
                 margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
                 lableText: "User Name",
+                inputAction: TextInputAction.next,
                 prefixIcon: const Icon(Icons.person),
               ),
               AppTextField(
                 onChange: (value) => email = value,
                 margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
                 lableText: "Email",
-                prefixIcon: const Icon(Icons.email),
+                inputAction: TextInputAction.next,
+                prefixIcon: const Icon(Icons.email_rounded),
               ),
               AppTextField(
                 onChange: (value) => password = value,
                 margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
                 lableText: "Password",
+                inputAction: TextInputAction.next,
                 prefixIcon: const Icon(Icons.lock),
                 ishide: true,
               ),
@@ -65,6 +68,7 @@ class RegisterScreen extends StatelessWidget {
                 onChange: (value) => conformPassword = value,
                 margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
                 lableText: "Conform Password",
+                inputAction: TextInputAction.done,
                 prefixIcon: const Icon(Icons.lock),
                 ishide: true,
               ),
@@ -73,21 +77,19 @@ class RegisterScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  print(email);
-                  print(password);
-                  print(userName);
                   if (password == conformPassword) {
                     final isSucsses =
                         await authControler.registerUserWithEmailAndPassword(
                             email: email,
                             password: password,
                             userName: userName);
-                    print("isSucsess ${isSucsses.toString()}");
                     if (isSucsses) {
-                      Get.snackbar("info", "register sucsessfully");
                       replaceScreen(
                           context: context, screen: const LoginScreen());
                     }
+                  } else {
+                    Get.snackbar(
+                        "Auth", "pasword should equle to comform Password");
                   }
                 },
                 child: Container(

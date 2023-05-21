@@ -129,4 +129,30 @@ class FireStoreGroupDataControler extends GetxController {
       _userDataControler.deleteGroupFromUserData(uid: uid, groupId: gid);
     }
   }
+
+  Future<bool> updateGroupData({
+    required String gid,
+    String? name,
+    String? discription,
+    String? admin,
+    Color? groupIconColor,
+    String? groupPhotoUrl,
+  }) async {
+    final groupRef = await getGroupDocumentRef(gid);
+    final group = await getGroup(gid);
+    if (groupRef != null && group != null) {
+      final updatedGroup = ChatAppGroup(
+          gid: gid,
+          name: name ?? group.value.name,
+          admin: group.value.admin,
+          discreption: discription ?? group.value.discreption,
+          members: group.value.members,
+          groupIconColor: groupIconColor ?? group.value.groupIconColor,
+          groupProfileUrl: groupPhotoUrl ?? group.value.groupProfileUrl);
+      groupRef.update(updatedGroup.toJson());
+      return true;
+    }
+
+    return false;
+  }
 }

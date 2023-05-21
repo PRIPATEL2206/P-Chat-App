@@ -34,6 +34,8 @@ class LoginScreen extends StatelessWidget {
                 height: 20,
               ),
               AppTextField(
+                inputAction: TextInputAction.next,
+                inputType: TextInputType.emailAddress,
                 margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
                 onChange: (value) => email = value,
                 lableText: "Email",
@@ -41,6 +43,7 @@ class LoginScreen extends StatelessWidget {
               ),
               AppTextField(
                 margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
+                inputAction: TextInputAction.done,
                 onChange: (value) => password = value,
                 lableText: "Password",
                 prefixIcon: const Icon(Icons.lock),
@@ -64,13 +67,15 @@ class LoginScreen extends StatelessWidget {
 
               ElevatedButton(
                   onPressed: () async {
-                    print(email);
-                    print(password);
+                    // print(email);
+                    // print(password);
                     final isUserLogin =
                         await authControler.loginUserWithEmailAndPassword(
                             email: email, password: password);
-                    print(isUserLogin);
-                    // Get.snackbar("info", "user login sussessfully");
+                    // print(isUserLogin);
+                    if (isUserLogin) {
+                      Get.snackbar("info", "user login sussessfully");
+                    }
                   },
                   child: Container(
                       margin: const EdgeInsets.symmetric(
@@ -78,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                       child: Obx(
                         () => authControler.isLodding.value
                             ? const CircularProgressIndicator(
-                                color: Colors.green,
+                                color: Colors.white,
                               )
                             : const AppText(
                                 fontSize: 20,

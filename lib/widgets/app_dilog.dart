@@ -13,7 +13,8 @@ Future showAppDilog(BuildContext context,
         child: SizedBox(
           width: 270,
           height: height,
-          child: Material(child: child),
+          child:
+              Material(borderRadius: BorderRadius.circular(10), child: child),
         ),
       );
     },
@@ -27,6 +28,7 @@ Future<String> showAddGroupDilog(BuildContext context) async {
     child: Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           AppTextField(
             lableText: "Group Name",
@@ -63,7 +65,7 @@ Future<Color> showColorPickerDilog(
   Color color = curentColor;
   await showAppDilog(
     context,
-    height: 500,
+    height: 550,
     child: Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
