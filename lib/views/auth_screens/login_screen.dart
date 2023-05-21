@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:pchat/controlers/auth_controler.dart';
 import 'package:pchat/helper/route_helper.dart';
 import 'package:pchat/views/auth_screens/register_screen.dart';
-import 'package:pchat/views/display_chat_screen.dart';
 import 'package:pchat/widgets/app_input_field.dart';
 import 'package:pchat/widgets/app_text.dart';
 
@@ -12,7 +11,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("build login");
+    // print("build login");
     String email = "";
     String password = "";
     AuthControler authControler = Get.find<AuthControler>();
@@ -69,13 +68,13 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () async {
                     // print(email);
                     // print(password);
-                    final isUserLogin =
-                        await authControler.loginUserWithEmailAndPassword(
-                            email: email, password: password);
+                    // final isUserLogin =
+                    await authControler.loginUserWithEmailAndPassword(
+                        email: email, password: password);
                     // print(isUserLogin);
-                    if (isUserLogin) {
-                      Get.snackbar("info", "user login sussessfully");
-                    }
+                    // if (isUserLogin) {
+                    //   // Get.snackbar("info", "user login sussessfully");
+                    // }
                   },
                   child: Container(
                       margin: const EdgeInsets.symmetric(
@@ -109,15 +108,15 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
 
-              // TODO: remove this
-              TextButton(
-                  onPressed: () {
-                    replaceScreen(
-                        context: context, screen: const GroupDisplayScreen());
-                  },
-                  child: const AppText(
-                    text: "home",
-                  ))
+              // // : remove this
+              // TextButton(
+              //     onPressed: () {
+              //       replaceScreen(
+              //           context: context, screen: const GroupDisplayScreen());
+              //     },
+              //     child: const AppText(
+              //       text: "home",
+              //     ))
             ],
           )),
     ));

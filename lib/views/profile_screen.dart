@@ -16,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("profile Build");
+    // print("profile Build");
     final isEditing = false.obs;
     final profileColor = user.value.profileColor.obs;
 

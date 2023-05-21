@@ -19,7 +19,7 @@ class _AppFutureBuilderState<T> extends State<AppFutureBuilder<T>> {
       setState(() {
         data = value;
         isCompleted = true;
-        print("datat in future $data");
+        // print("datat in future $data");
       });
     });
   }
@@ -29,7 +29,7 @@ class _AppFutureBuilderState<T> extends State<AppFutureBuilder<T>> {
     super.initState();
     isCompleted = false;
     data = null;
-    print("future inin state");
+    // print("future inin state");
     getFuture();
   }
 

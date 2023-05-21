@@ -6,7 +6,7 @@ import 'package:pchat/models/user_model.dart';
 
 class AuthControler extends GetxController {
   final RxBool _isUserLogin = false.obs;
-  final RxBool _isUserEmailVerified = false.obs;
+  // final RxBool _isUserEmailVerified = false.obs;
   Rx<ChatAppUser>? _chatAppCurrentUser;
   final RxBool _isLodding = false.obs;
   final FireStoreUserDataControler _fireStoreUserDataControler;
@@ -21,13 +21,13 @@ class AuthControler extends GetxController {
     if (cuser == null) {
       _chatAppCurrentUser = null;
       _isUserLogin.value = false;
-      _isUserEmailVerified.value = false;
+      // _isUserEmailVerified.value = false;
     } else {
-      _isUserEmailVerified.value = cuser.emailVerified;
-      if (_isUserEmailVerified.value) {
-        _chatAppCurrentUser =
-            await _fireStoreUserDataControler.getOrCreateUserInDataBase(cuser);
-      }
+      // _isUserEmailVerified.value = cuser.emailVerified;
+      // if (_isUserEmailVerified.value) {
+      _chatAppCurrentUser =
+          await _fireStoreUserDataControler.getOrCreateUserInDataBase(cuser);
+      // }
       _isUserLogin.value = _chatAppCurrentUser == null ? false : true;
     }
 
@@ -42,11 +42,11 @@ class AuthControler extends GetxController {
           return;
         }
         try {
-          _isUserEmailVerified.value = user.emailVerified;
-          if (_isUserEmailVerified.value) {
-            _chatAppCurrentUser = await _fireStoreUserDataControler
-                .getOrCreateUserInDataBase(user);
-          }
+          // _isUserEmailVerified.value = user.emailVerified;
+          // if (_isUserEmailVerified.value) {
+          _chatAppCurrentUser =
+              await _fireStoreUserDataControler.getOrCreateUserInDataBase(user);
+          // }
 
           // print(_chatAppCurrentUser?.value.toJson());
           _isUserLogin.value = _chatAppCurrentUser == null ? false : true;
@@ -64,7 +64,7 @@ class AuthControler extends GetxController {
   Rx<ChatAppUser>? get currentUser => _chatAppCurrentUser;
   RxBool get isUserLogin => _isUserLogin;
   RxBool get isLodding => _isLodding;
-  RxBool get isEmailVerified => _isUserEmailVerified;
+  // RxBool get isEmailVerified => _isUserEmailVerified;
 
   // seters here
 
@@ -93,7 +93,7 @@ class AuthControler extends GetxController {
         default:
           Get.snackbar("Auth ", e.code);
 
-          print(e.code);
+        // print(e.code);
       }
     } catch (e) {
       Get.snackbar("error in login ", e.toString());
@@ -127,7 +127,7 @@ class AuthControler extends GetxController {
         default:
           Get.snackbar("Auth ", e.code);
 
-          print(e.code);
+        // print(e.code);
       }
     } catch (e) {
       Get.snackbar("error in registration", e.toString());

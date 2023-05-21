@@ -31,7 +31,7 @@ class FireStoreUserDataControler extends GetxController {
           ).toJson());
     } catch (e) {
       Get.snackbar("error in adding user", e.toString());
-      print(e);
+      // print(e);
     }
 
     return true;
@@ -50,7 +50,7 @@ class FireStoreUserDataControler extends GetxController {
           ));
 
           final sub = userDocument.snapshots().listen((event) {
-            print("lisining user firestore   $event");
+            // print("lisining user firestore   $event");
             user.value = ChatAppUser.fromjson(event.data()!);
           }, onDone: (() => user.close()), cancelOnError: true);
 
@@ -59,7 +59,7 @@ class FireStoreUserDataControler extends GetxController {
         }
       } catch (e) {
         Get.snackbar("error in getting user $uid", e.toString());
-        print(e);
+        // print(e);
       }
     }
     return null;

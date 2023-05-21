@@ -19,7 +19,7 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("build register");
+    // print("build register");
     String email = "";
     String userName = "";
     String password = "";

@@ -125,7 +125,7 @@ class GroupDisplayScreen extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               final groupName = await showAddGroupDilog(context);
-              print("group name = $groupName");
+              // print("group name = $groupName");
               if (groupName.isNotEmpty) {
                 groupControler.createGroup(
                   groupName: groupName,

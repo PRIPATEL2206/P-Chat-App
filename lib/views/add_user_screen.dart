@@ -55,23 +55,25 @@ class AddUserScreen extends StatelessWidget {
                               context: context,
                               screen: ProfileScreen(user: users[index])),
                           bgColor: users[index].value.profileColor,
-                          trailing: IconButton(
-                              onPressed: () => isUserAdded
-                                  ? groupControler.deleteUserFromGroup(
-                                      gid: group.value.gid,
-                                      uid: users[index].value.uid)
-                                  : groupControler.addUserInGroup(
-                                      gid: group.value.gid,
-                                      uid: users[index].value.uid),
-                              icon: isUserAdded
-                                  ? const Icon(
-                                      Icons.person_remove_outlined,
-                                      color: Colors.red,
-                                    )
-                                  : const Icon(
-                                      Icons.person_add_alt_outlined,
-                                      color: Colors.green,
-                                    )),
+                          trailing: group.value.admin != users[index].value.uid
+                              ? IconButton(
+                                  onPressed: () => isUserAdded
+                                      ? groupControler.deleteUserFromGroup(
+                                          gid: group.value.gid,
+                                          uid: users[index].value.uid)
+                                      : groupControler.addUserInGroup(
+                                          gid: group.value.gid,
+                                          uid: users[index].value.uid),
+                                  icon: isUserAdded
+                                      ? const Icon(
+                                          Icons.person_remove_outlined,
+                                          color: Colors.red,
+                                        )
+                                      : const Icon(
+                                          Icons.person_add_alt_outlined,
+                                          color: Colors.green,
+                                        ))
+                              : null,
                           indexKey: users[index].value.uid,
                           name: users[index].value.name,
                           dissception: users[index].value.info,

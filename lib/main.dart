@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    print("main build");
+    // print("main build");
     return GetMaterialApp(
       title: 'PChat',
       debugShowCheckedModeBanner: false,
