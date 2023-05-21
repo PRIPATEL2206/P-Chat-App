@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>745368128652-d3r1peue3nmim75irg06jfom4t90qtt6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.745368128652-d3r1peue3nmim75irg06jfom4t90qtt6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD7QqkAgIhdHRyqpSu67GZWcoqVHk6xnCc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>745368128652</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>tech.princepatel2206.pchat</string>
+	<key>PROJECT_ID</key>
+	<string>pchat-app-2a849</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pchat-app-2a849.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:745368128652:ios:ab95979c7470001400ffa9</string>
+</dict>
+</plist>

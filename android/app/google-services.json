@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "745368128652",
+    "project_id": "pchat-app-2a849",
+    "storage_bucket": "pchat-app-2a849.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745368128652:android:45c36385f477608a00ffa9",
+        "android_client_info": {
+          "package_name": "tech.princepatel2206.pchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "745368128652-vdamq7rikrc539iqkum5mad87ooksbcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkRn9z2JfVjOWCZHuZ0SGjZJOx2eAduD8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "745368128652-vdamq7rikrc539iqkum5mad87ooksbcu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
