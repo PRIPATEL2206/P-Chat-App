@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pchat/constants/firebase_constants.dart';
 import 'package:pchat/constants/key_constants.dart';
 import 'package:pchat/helper/stream_lisiner_helper.dart';
+import 'package:pchat/models/group_model.dart';
 import 'package:pchat/models/user_model.dart';
 
 class FireStoreUserDataControler extends GetxController {
@@ -67,9 +68,23 @@ class FireStoreUserDataControler extends GetxController {
 
   Future<Rx<ChatAppUser>?> getOrCreateUserInDataBase(User user) async {
     if (!(await isUserExist(user.uid))) {
-      addUserInDataBase(user);
+      await addUserInDataBase(user);
     }
     return getUserFromDataBase(user.uid);
+  }
+
+  Future<RxList<Rx<ChatAppUser>>> getRXUsersOfGroupFromDataBase(
+      Rx<ChatAppGroup> group) async {
+    RxList<Rx<ChatAppUser>> users = <Rx<ChatAppUser>>[].obs;
+    getUsersFromDataBase(group.value.members)
+        .then((value) => users.value = value);
+
+    final sub = group.stream.listen((newGroup) async {
+      users.value = await getUsersFromDataBase(newGroup.members);
+    });
+    StreamLisinerHelper.addUserSubscription(sub);
+
+    return users;
   }
 
   Future<List<Rx<ChatAppUser>>> getUsersFromDataBase(
@@ -185,17 +200,29 @@ class FireStoreUserDataControler extends GetxController {
         .orderBy(UserJsonKey.uid)
         .snapshots()
         .listen((event) async {
-      if (event.docs.last.data()[UserJsonKey.uid] != users.last.value.uid ||
-          event.docs.isEmpty) {
-        users.add((await getUserFromDataBase(
-            event.docs.last.data()[UserJsonKey.uid]))!);
+      if (!(event.isBlank ?? true)) {
+        bool isUserAdded = false;
+
+        for (var user in users) {
+          if (user.value.uid == event.docs.last.data()[UserJsonKey.uid]) {
+            isUserAdded = true;
+            return;
+          }
+        }
+
+        if (users.isEmpty || !isUserAdded) {
+          users.add((await getUserFromDataBase(
+              event.docs.last.data()[UserJsonKey.uid]))!);
+        }
       }
-      // for (var user in event.docs) {
-      //   if (user.exists) {
-      //     uids.add(user.data()[UserJsonKey.uid]);
-      //   }
-      // }
     });
     return users;
+  }
+
+  Future<void> deleteUser(String uid) async {
+    final userRef = await getUserDucumentRefrance(uid);
+    if (userRef != null) {
+      userRef.delete();
+    }
   }
 }

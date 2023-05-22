@@ -5,6 +5,7 @@ import 'package:pchat/constants/key_constants.dart';
 import 'package:pchat/controlers/firebase_firestore_groupdata.dart';
 import 'package:pchat/helper/stream_lisiner_helper.dart';
 import 'package:pchat/models/chat_model.dart';
+import 'package:pchat/models/user_model.dart';
 
 class FireStoreChatControler extends GetxController {
   final FireStoreGroupDataControler _groupDataControler;
@@ -24,7 +25,7 @@ class FireStoreChatControler extends GetxController {
       if (groupRef != null) {
         if (!(groupRef.collection(FireBaseConstants.chatsCollection).isBlank ??
             false)) {
-          chats.value = await groupRef
+          groupRef
               .collection(FireBaseConstants.chatsCollection)
               .orderBy(ChatJsonKey.dateTime, descending: false)
               .get()
@@ -36,7 +37,7 @@ class FireStoreChatControler extends GetxController {
               }
             }
             return innerChats;
-          });
+          }).then((value) => chats.value = value);
         }
 
         final sub = groupRef
@@ -44,15 +45,17 @@ class FireStoreChatControler extends GetxController {
             .orderBy(ChatJsonKey.dateTime, descending: false)
             .snapshots()
             .listen((event) {
-          if (chats.last.cid != event.docs.last.data()[ChatJsonKey.cid] ||
-              chats.isEmpty) {
-            chats.add(Chat.fromJson(event.docs.last.data()));
+          // print("lisening chat ${event.docs.last}");
+          try {
+            if (!(event.isBlank ?? true)) {
+              if (chats.isEmpty ||
+                  chats.last.cid != event.docs.last.data()[ChatJsonKey.cid]) {
+                chats.add(Chat.fromJson(event.docs.last.data()));
+              }
+            }
+          } catch (e) {
+            // Get.snackbar("error", e.toString());
           }
-          // for (final chat in event.docs) {
-          //   if (chat.exists) {
-          //     ;
-          //   }
-          // }
         });
         StreamLisinerHelper.addChatSubscription(sub);
       }
@@ -65,14 +68,15 @@ class FireStoreChatControler extends GetxController {
   Future<void> sendMessage({
     required String groupId,
     required String message,
-    required String sendBy,
+    required ChatAppUser sendBy,
   }) async {
     final chatRef = await createEmptyChat(groupId);
     if (chatRef != null) {
       chatRef.update(Chat(
               cid: chatRef.id,
               message: message,
-              sendBy: sendBy,
+              sendBy: sendBy.uid,
+              senderName: sendBy.name,
               dateTime: DateTime.now(),
               isRecived: false)
           .toJson());

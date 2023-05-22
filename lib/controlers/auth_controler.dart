@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:pchat/controlers/firebase_firestore_userdata_controler.dart';
@@ -6,7 +8,7 @@ import 'package:pchat/models/user_model.dart';
 
 class AuthControler extends GetxController {
   final RxBool _isUserLogin = false.obs;
-  // final RxBool _isUserEmailVerified = false.obs;
+  final RxBool _isUserEmailVerified = false.obs;
   Rx<ChatAppUser>? _chatAppCurrentUser;
   final RxBool _isLodding = false.obs;
   final FireStoreUserDataControler _fireStoreUserDataControler;
@@ -21,18 +23,19 @@ class AuthControler extends GetxController {
     if (cuser == null) {
       _chatAppCurrentUser = null;
       _isUserLogin.value = false;
-      // _isUserEmailVerified.value = false;
+      _isUserEmailVerified.value = false;
     } else {
-      // _isUserEmailVerified.value = cuser.emailVerified;
-      // if (_isUserEmailVerified.value) {
-      _chatAppCurrentUser =
-          await _fireStoreUserDataControler.getOrCreateUserInDataBase(cuser);
-      // }
-      _isUserLogin.value = _chatAppCurrentUser == null ? false : true;
+      _isUserEmailVerified.value = cuser.emailVerified;
+      if (_isUserEmailVerified.value) {
+        _chatAppCurrentUser =
+            await _fireStoreUserDataControler.getOrCreateUserInDataBase(cuser);
+      }
+      _isUserLogin.value = true;
     }
 
     FirebaseAuth.instance.authStateChanges().listen(
       (user) async {
+        print("lisining ${_isUserEmailVerified} ${_isUserEmailVerified}");
         // print("lisining auth");
         // user = FirebaseAuth.instance.currentUser;
         if (user == null) {
@@ -42,14 +45,14 @@ class AuthControler extends GetxController {
           return;
         }
         try {
-          // _isUserEmailVerified.value = user.emailVerified;
-          // if (_isUserEmailVerified.value) {
-          _chatAppCurrentUser =
-              await _fireStoreUserDataControler.getOrCreateUserInDataBase(user);
-          // }
+          _isUserEmailVerified.value = user.emailVerified;
+          if (_isUserEmailVerified.value) {
+            _chatAppCurrentUser = await _fireStoreUserDataControler
+                .getOrCreateUserInDataBase(user);
+          }
 
           // print(_chatAppCurrentUser?.value.toJson());
-          _isUserLogin.value = _chatAppCurrentUser == null ? false : true;
+          _isUserLogin.value = true;
         } catch (e) {
           Get.snackbar("error in user change", e.toString());
         }
@@ -64,7 +67,7 @@ class AuthControler extends GetxController {
   Rx<ChatAppUser>? get currentUser => _chatAppCurrentUser;
   RxBool get isUserLogin => _isUserLogin;
   RxBool get isLodding => _isLodding;
-  // RxBool get isEmailVerified => _isUserEmailVerified;
+  RxBool get isEmailVerified => _isUserEmailVerified;
 
   // seters here
 
@@ -145,7 +148,6 @@ class AuthControler extends GetxController {
       await StreamLisinerHelper.closeAllSubscription();
       FirebaseAuth.instance.signOut();
       Get.snackbar("Auth Success", "Log out SuccessFully");
-      // print("logout Sucsessfully");
       _isLodding.value = false;
       return true;
     }
@@ -154,9 +156,13 @@ class AuthControler extends GetxController {
   }
 
 // delete user account
-  Future<bool> deleteAcount() async {
+  Future<bool> deleteAcount(String uid) async {
     _isLodding.value = true;
-    Get.snackbar("Info", "Deleteing User is not permited for now");
+
+    logOut();
+    _fireStoreUserDataControler.deleteUser(uid);
+
+    Get.snackbar("Info", "Deleted successfuly");
     _isLodding.value = false;
 
     return true;
@@ -165,6 +171,14 @@ class AuthControler extends GetxController {
   // send email verification code
   Future<void> sendEmailVerification() async {
     // if(FirebaseAuth.instance.currentUser)
-    FirebaseAuth.instance.currentUser?.sendEmailVerification();
+    try {
+      FirebaseAuth.instance.currentUser?.sendEmailVerification();
+    } catch (e) {
+      Get.snackbar("auth", e.toString());
+    }
+    Future.delayed(
+      const Duration(seconds: 1),
+    ).then((value) =>
+        Get.snackbar("Auth", "Verification email send Successfully"));
   }
 }

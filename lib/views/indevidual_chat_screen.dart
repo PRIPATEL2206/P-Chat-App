@@ -22,8 +22,9 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print("Chat Screen build");
+    final scrollControler = ScrollController();
     final chatControler = Get.find<FireStoreChatControler>();
-    String chatText = "";
+    final chatText = TextEditingController(text: "");
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -62,6 +63,10 @@ class ChatScreen extends StatelessWidget {
                     if (isCompleted) {
                       if (data != null) {
                         final chats = data;
+                        data.listen((p0) {
+                          scrollControler
+                              .jumpTo(scrollControler.position.maxScrollExtent);
+                        });
                         return GetX<FireStoreChatControler>(
                           builder: (controller) {
                             String prewusDate = "";
@@ -69,6 +74,7 @@ class ChatScreen extends StatelessWidget {
                                 "${DateTime.now().day} / ${DateTime.now().month} / ${DateTime.now().year}";
                             return ListView.builder(
                               itemCount: chats.length,
+                              controller: scrollControler,
                               itemBuilder: (context, index) {
                                 bool isDateShow = false;
                                 if (prewusDate !=
@@ -141,18 +147,33 @@ class ChatScreen extends StatelessWidget {
                                                       : CrossAxisAlignment
                                                           .start,
                                               children: [
-                                                AppText(
-                                                  text: chats[index].message,
-                                                  fontSize: 20,
+                                                !isSendByCurrentUser
+                                                    ? AppText(
+                                                        text: chats[index]
+                                                            .senderName,
+                                                        fontSize: 14,
+                                                        color: Colors.lightBlue,
+                                                      )
+                                                    : Container(),
+                                                Container(
+                                                  constraints: BoxConstraints(
+                                                      maxWidth: Get.width * 0.7,
+                                                      minWidth: 30),
+                                                  child: AppText(
+                                                    text: chats[index].message,
+                                                    fontSize: 20,
+                                                    maxLine: 10,
+                                                  ),
                                                 ),
                                                 const SizedBox(
                                                   height: 3,
                                                 ),
                                                 AppText(
                                                     fontSize: 12,
-                                                    textAlign: TextAlign.end,
+                                                    color: const Color.fromARGB(
+                                                        255, 164, 185, 196),
                                                     text:
-                                                        "${chats[index].dateTime.hour} : ${chats[index].dateTime.minute}")
+                                                        "${chats[index].dateTime.hour % 12} : ${chats[index].dateTime.minute} ${chats[index].dateTime.hour / 12 < 0 ? "am" : "pm"}")
                                               ],
                                             ),
                                           ),
@@ -187,21 +208,23 @@ class ChatScreen extends StatelessWidget {
                 Expanded(
                   child: AppTextField(
                     inputAction: TextInputAction.send,
+                    textEditingController: chatText,
+                    isOnDoneClear: true,
                     // margin: EdgeInsets.zero,
-                    onChange: (value) => chatText = value,
+                    // onChange: (value) => chatText = value,
                     hintText: "Massage",
                     height: 50,
                   ),
                 ),
                 IconButton(
                     onPressed: () {
-                      // print(chatText.text);
+                      // print("massage is   ${chatText.text}");
                       chatControler.sendMessage(
                         groupId: group.value.gid,
-                        message: chatText,
-                        sendBy:
-                            Get.find<AuthControler>().currentUser!.value.uid,
+                        message: chatText.text,
+                        sendBy: Get.find<AuthControler>().currentUser!.value,
                       );
+                      chatText.text = "";
                     },
                     icon: const Icon(size: 35, Icons.send_rounded)),
               ],

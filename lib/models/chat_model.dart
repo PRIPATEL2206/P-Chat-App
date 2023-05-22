@@ -6,11 +6,13 @@ class Chat {
   final String sendBy;
   final DateTime dateTime;
   final bool isRecived;
+  final String senderName;
 
   Chat({
     required this.cid,
     required this.message,
     required this.sendBy,
+    required this.senderName,
     required this.dateTime,
     required this.isRecived,
   });
@@ -19,6 +21,7 @@ class Chat {
       : cid = jsonData[ChatJsonKey.cid],
         message = jsonData[ChatJsonKey.message],
         sendBy = jsonData[ChatJsonKey.sendBy],
+        senderName = jsonData[ChatJsonKey.senderName],
         dateTime =
             DateTime.fromMillisecondsSinceEpoch(jsonData[ChatJsonKey.dateTime]),
         isRecived = jsonData[ChatJsonKey.isRecived];
@@ -27,6 +30,7 @@ class Chat {
         ChatJsonKey.cid: cid,
         ChatJsonKey.message: message,
         ChatJsonKey.sendBy: sendBy,
+        ChatJsonKey.senderName: senderName,
         ChatJsonKey.dateTime: dateTime.millisecondsSinceEpoch,
         ChatJsonKey.isRecived: isRecived,
       };

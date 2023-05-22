@@ -27,6 +27,7 @@ class GroupDisplayScreen extends StatelessWidget {
       onWillPop: () async {
         if (isSearch.value) {
           isSearch.value = false;
+          searchText.value = "";
           return false;
         }
         return true;

@@ -23,6 +23,7 @@ Future showAppDilog(BuildContext context,
 
 Future<String> showAddGroupDilog(BuildContext context) async {
   String groupName = "";
+  String str = "";
   await showAppDilog(
     context,
     child: Padding(
@@ -32,7 +33,7 @@ Future<String> showAddGroupDilog(BuildContext context) async {
         children: [
           AppTextField(
             lableText: "Group Name",
-            onChange: (value) => groupName = value,
+            onChange: (value) => str = value,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -46,6 +47,7 @@ Future<String> showAddGroupDilog(BuildContext context) async {
                   )),
               ElevatedButton(
                   onPressed: () {
+                    groupName = str;
                     goBack(context);
                   },
                   child: const AppText(
@@ -89,4 +91,47 @@ Future<Color> showColorPickerDilog(
     ),
   );
   return color;
+}
+
+Future<bool> showAppAlartDilog(BuildContext context, String alartInfo) async {
+  bool isConform = false;
+
+  await showAppDilog(context,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AppText(
+              fontSize: 20,
+              text: alartInfo,
+              maxLine: 3,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    goBack(context);
+                  },
+                  child: const AppText(
+                    text: "No",
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    isConform = true;
+                    goBack(context);
+                  },
+                  child: const AppText(
+                    text: "Yes",
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ));
+
+  return isConform;
 }

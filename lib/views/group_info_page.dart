@@ -32,14 +32,14 @@ class GroupInfoScreen extends StatelessWidget {
       () {
         String groupName = group.value.name;
         String groupDiscreption = group.value.discreption;
-        groupIconColor.value = group.value.groupIconColor;
 
-        final bool isUserAdmin = group.value.admin ==
+        final bool isCurentuserAdmin = group.value.admin ==
             Get.find<AuthControler>().currentUser!.value.uid;
         return WillPopScope(
           onWillPop: () async {
             if (isEditing.value) {
               isEditing.value = false;
+              groupIconColor.value = group.value.groupIconColor;
               return false;
             }
 
@@ -65,7 +65,7 @@ class GroupInfoScreen extends StatelessWidget {
                       child: AppText(
                         text: isEditing.value ? "Save" : "Edit",
                       )),
-                  isUserAdmin
+                  isCurentuserAdmin
                       ? IconButton(
                           onPressed: () {
                             gotoScreen(
@@ -79,140 +79,165 @@ class GroupInfoScreen extends StatelessWidget {
                   text: group.value.name,
                 )),
             body: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      if (isEditing.value) {
-                        groupIconColor.value = await showColorPickerDilog(
-                            context: context,
-                            curentColor: groupIconColor.value);
-                      }
-                      // print(groupIconColor.value);
-                    },
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Obx(
-                          () => Hero(
-                            tag: HeroKeyConstants.groupAvtar,
-                            child: AlphabateUserAvatar(
-                              color: group.value.groupIconColor,
-                              userName: group.value.name,
-                              imageUrl: group.value.groupProfileUrl,
-                              redius: 50,
-                            ),
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  onTap: () async {
+                    if (isEditing.value) {
+                      groupIconColor.value = await showColorPickerDilog(
+                          context: context, curentColor: groupIconColor.value);
+                    }
+                    // print(groupIconColor.value);
+                  },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Obx(
+                        () => Hero(
+                          tag: HeroKeyConstants.groupAvtar,
+                          child: AlphabateUserAvatar(
+                            color: groupIconColor.value,
+                            userName: group.value.name,
+                            imageUrl: group.value.groupProfileUrl,
+                            redius: 50,
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: isEditing.value
-                              ? const Icon(Icons.colorize_rounded)
-                              : Container(),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const AppText(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          text: "Group Name : "),
-                      isEditing.value
-                          ? Expanded(
-                              child: AppTextField(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 2),
-                                height: 50,
-                                initialText: group.value.name,
-                                onChange: (value) => groupName = value,
-                              ),
-                            )
-                          : AppText(
-                              text: group.value.name,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: isEditing.value
+                            ? const Icon(Icons.colorize_rounded)
+                            : Container(),
+                      )
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const AppText(text: "Discreption : "),
-                      isEditing.value
-                          ? Expanded(
-                              child: AppTextField(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 2),
-                                height: 50,
-                                initialText: group.value.discreption,
-                                onChange: (value) => groupDiscreption = value,
-                              ),
-                            )
-                          : AppText(
-                              text: group.value.discreption,
-                              fontSize: 14,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const AppText(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        text: "Group Name : "),
+                    isEditing.value
+                        ? Expanded(
+                            child: AppTextField(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              height: 50,
+                              initialText: group.value.name,
+                              onChange: (value) => groupName = value,
                             ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const AppText(text: "Group Members"),
-                  Expanded(
-                      child: AppFutureBuilder(
-                          future: userControler
-                              .getUsersFromDataBase(group.value.members),
-                          builder: (isCompleted, data) {
-                            if (isCompleted && data != null) {
-                              final users = data;
-                              return ListView.builder(
-                                itemCount: users.length,
-                                itemBuilder: (context, index) {
-                                  return GroupUserTile(
-                                    bgColor: users[index].value.profileColor,
-                                    dissception: users[index].value.info,
-                                    name: users[index].value.name,
-                                    photoUrl: users[index].value.profileUrl,
-                                    onTileTap: () => gotoScreen(
-                                        context: context,
-                                        screen:
-                                            ProfileScreen(user: users[index])),
-                                    indexKey: users[index].value.uid,
-                                    trailing: isUserAdmin &&
-                                            users[index].value.uid !=
-                                                group.value.admin
+                          )
+                        : AppText(
+                            text: group.value.name,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const AppText(text: "Discreption : "),
+                    isEditing.value
+                        ? Expanded(
+                            child: AppTextField(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              height: 50,
+                              initialText: group.value.discreption,
+                              onChange: (value) => groupDiscreption = value,
+                            ),
+                          )
+                        : AppText(
+                            text: group.value.discreption,
+                            fontSize: 14,
+                          ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const AppText(text: "Group Members"),
+                Expanded(
+                  child: AppFutureBuilder(
+                    future: userControler.getRXUsersOfGroupFromDataBase(group),
+                    builder: (isCompleted, data) {
+                      if (isCompleted && data != null) {
+                        final users = data;
+                        return Obx(
+                          () => ListView.builder(
+                            itemCount: users.length,
+                            itemBuilder: (context, index) {
+                              return GroupUserTile(
+                                bgColor: users[index].value.profileColor,
+                                dissception: users[index].value.info,
+                                name: users[index].value.name,
+                                photoUrl: users[index].value.profileUrl,
+                                onTileTap: () => gotoScreen(
+                                    context: context,
+                                    screen: ProfileScreen(user: users[index])),
+                                indexKey: users[index].value.uid,
+                                trailing: users[index].value.uid !=
+                                        group.value.admin
+                                    ? isCurentuserAdmin
                                         ? IconButton(
-                                            onPressed: () => groupControler
-                                                .deleteUserFromGroup(
-                                                    gid: group.value.gid,
-                                                    uid:
-                                                        users[index].value.uid),
+                                            onPressed: () async {
+                                              if (await showAppAlartDilog(
+                                                  context,
+                                                  "Do you want to Delete  ${users[index].value.name} from group ?")) {
+                                                groupControler
+                                                    .deleteUserFromGroup(
+                                                        gid: group.value.gid,
+                                                        uid: users[index]
+                                                            .value
+                                                            .uid);
+                                              }
+                                            },
                                             icon: const Icon(
                                               Icons.person_remove_outlined,
                                               color: Colors.red,
                                             ))
-                                        : null,
-                                  );
-                                },
+                                        : Container()
+                                    : const AppText(
+                                        text: "Admin",
+                                        color: Colors.blue,
+                                      ),
                               );
-                            }
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }))
-                ]),
+                            },
+                          ),
+                        );
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  ),
+                ),
+                isCurentuserAdmin
+                    ? TextButton(
+                        onPressed: () async {
+                          if (await showAppAlartDilog(context,
+                              "Do you want to delete ${group.value.name}")) {
+                            groupControler.deleteGroup(group.value.gid);
+                          }
+                        },
+                        child: const AppText(
+                          text: "Delete Group",
+                        ))
+                    : Container()
+              ],
+            ),
           ),
         );
       },

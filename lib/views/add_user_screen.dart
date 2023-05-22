@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pchat/controlers/firebase_firestore_groupdata.dart';
@@ -5,6 +7,7 @@ import 'package:pchat/controlers/firebase_firestore_userdata_controler.dart';
 import 'package:pchat/helper/route_helper.dart';
 import 'package:pchat/models/group_model.dart';
 import 'package:pchat/views/profile_screen.dart';
+import 'package:pchat/widgets/app_dilog.dart';
 import 'package:pchat/widgets/app_future_builder.dart';
 import 'package:pchat/widgets/app_input_field.dart';
 import 'package:pchat/widgets/app_text.dart';
@@ -43,7 +46,8 @@ class AddUserScreen extends StatelessWidget {
                 () {
                   final users = data
                       .where((element) =>
-                          element.value.name.contains(searchText.value))
+                          element.value.name.contains(searchText.value) ||
+                          element.value.email.contains(searchText.value))
                       .toList();
                   return ListView.builder(
                     itemCount: users.length,
@@ -57,13 +61,21 @@ class AddUserScreen extends StatelessWidget {
                           bgColor: users[index].value.profileColor,
                           trailing: group.value.admin != users[index].value.uid
                               ? IconButton(
-                                  onPressed: () => isUserAdded
-                                      ? groupControler.deleteUserFromGroup(
+                                  onPressed: () async {
+                                    if (isUserAdded) {
+                                      if (await showAppAlartDilog(context,
+                                          "Do you want to delete ${users[index].value.name} from group ?")) {
+                                        groupControler.deleteUserFromGroup(
+                                            gid: group.value.gid,
+                                            uid: users[index].value.uid);
+                                      }
+                                    } else if (await showAppAlartDilog(context,
+                                        "Do you want to add ${users[index].value.name} in to group ?")) {
+                                      groupControler.addUserInGroup(
                                           gid: group.value.gid,
-                                          uid: users[index].value.uid)
-                                      : groupControler.addUserInGroup(
-                                          gid: group.value.gid,
-                                          uid: users[index].value.uid),
+                                          uid: users[index].value.uid);
+                                    }
+                                  },
                                   icon: isUserAdded
                                       ? const Icon(
                                           Icons.person_remove_outlined,

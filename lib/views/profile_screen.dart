@@ -25,13 +25,14 @@ class ProfileScreen extends StatelessWidget {
         String name = user.value.name;
         String info = user.value.info;
         String address = user.value.address;
-        profileColor.value = user.value.profileColor;
         return WillPopScope(
           onWillPop: () async {
             if (isEditing.value) {
               isEditing.value = false;
+              profileColor.value = user.value.profileColor;
               return false;
             }
+
             return true;
           },
           child: Scaffold(
@@ -41,20 +42,24 @@ class ProfileScreen extends StatelessWidget {
                   text: isEditing.value ? "Edite" : "Info",
                 ),
                 actions: [
-                  TextButton(
-                      onPressed: () {
-                        if (isEditing.value) {
-                          Get.find<FireStoreUserDataControler>().updateUserData(
-                              uid: user.value.uid,
-                              address: address,
-                              info: info,
-                              name: name,
-                              profileColor: profileColor.value);
-                        }
+                  user.value.uid == controller.currentUser!.value.uid
+                      ? TextButton(
+                          onPressed: () {
+                            if (isEditing.value) {
+                              Get.find<FireStoreUserDataControler>()
+                                  .updateUserData(
+                                      uid: user.value.uid,
+                                      address: address,
+                                      info: info,
+                                      name: name,
+                                      profileColor: profileColor.value);
+                            }
 
-                        isEditing.value = !isEditing.value;
-                      },
-                      child: AppText(text: isEditing.value ? "Save" : "Edit")),
+                            isEditing.value = !isEditing.value;
+                          },
+                          child:
+                              AppText(text: isEditing.value ? "Save" : "Edit"))
+                      : Container(),
                 ],
               ),
               body: SingleChildScrollView(
@@ -174,8 +179,9 @@ class ProfileScreen extends StatelessWidget {
                         ? Column(
                             children: [
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   goBack(context);
+
                                   controller.logOut();
                                 },
                                 child: controller.isLodding.value
@@ -187,7 +193,9 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  controller.deleteAcount();
+                                  goBack(context);
+
+                                  controller.deleteAcount(user.value.uid);
                                 },
                                 child: controller.isLodding.value
                                     ? const CircularProgressIndicator()

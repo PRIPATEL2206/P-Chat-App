@@ -22,7 +22,7 @@ class FireStoreGroupDataControler extends GetxController {
   Future<RxList<Rx<ChatAppGroup>>> getRXAllGroupsOfUser(
       Rx<ChatAppUser> user) async {
     final RxList<Rx<ChatAppGroup>> groups = <Rx<ChatAppGroup>>[].obs;
-    groups.value = await getAllGroupsOfUser(user.value);
+    getAllGroupsOfUser(user.value).then((value) => groups.value = value);
 
     user.stream.listen((newUser) async {
       groups.value = await getAllGroupsOfUser(newUser);
@@ -154,5 +154,12 @@ class FireStoreGroupDataControler extends GetxController {
     }
 
     return false;
+  }
+
+  Future<void> deleteGroup(String gid) async {
+    final docRef = await getGroupDocumentRef(gid);
+    if (docRef != null) {
+      docRef.delete();
+    }
   }
 }

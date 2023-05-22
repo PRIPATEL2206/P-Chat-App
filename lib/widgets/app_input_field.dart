@@ -77,7 +77,7 @@ class _AppTextFieldState extends State<AppTextField> {
         onChanged: widget.onChange,
         onEditingComplete: () {
           if (widget.isOnDoneClear) {
-            editingControler.text = "";
+            editingControler.clear();
           }
           if (widget.onSubmit != null) {
             widget.onSubmit!();

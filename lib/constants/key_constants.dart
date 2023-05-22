@@ -20,6 +20,7 @@ class ChatJsonKey {
   static const cid = "c_id";
   static const message = "u_message";
   static const sendBy = "u_sendBy";
+  static const senderName = "u_senderName";
   static const dateTime = "u_dateTime";
   static const isRecived = "u_isRecived";
 }
