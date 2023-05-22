@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pchat/controlers/firebase_firestore_groupdata.dart';
@@ -49,6 +47,11 @@ class AddUserScreen extends StatelessWidget {
                           element.value.name.contains(searchText.value) ||
                           element.value.email.contains(searchText.value))
                       .toList();
+
+                  // users.forEach((element) {
+                  //   print(element.value.uid);
+                  // });
+                  // print(users);
                   return ListView.builder(
                     itemCount: users.length,
                     itemBuilder: (context, index) {

@@ -229,7 +229,7 @@ class GroupInfoScreen extends StatelessWidget {
                         onPressed: () async {
                           if (await showAppAlartDilog(context,
                               "Do you want to delete ${group.value.name}")) {
-                            groupControler.deleteGroup(group.value.gid);
+                            // groupControler.deleteGroup(group.value.gid);
                           }
                         },
                         child: const AppText(

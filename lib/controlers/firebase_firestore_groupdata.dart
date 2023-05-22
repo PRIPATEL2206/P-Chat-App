@@ -156,10 +156,10 @@ class FireStoreGroupDataControler extends GetxController {
     return false;
   }
 
-  Future<void> deleteGroup(String gid) async {
-    final docRef = await getGroupDocumentRef(gid);
-    if (docRef != null) {
-      docRef.delete();
-    }
-  }
+  // Future<void> deleteGroup(String gid) async {
+  //   final docRef = await getGroupDocumentRef(gid);
+  //   if (docRef != null) {
+  //     docRef.delete();
+  //   }
+  // }
 }

@@ -98,7 +98,6 @@ class FireStoreUserDataControler extends GetxController {
         users.add(user);
       }
     }
-
     return users;
   }
 
@@ -201,28 +200,20 @@ class FireStoreUserDataControler extends GetxController {
         .snapshots()
         .listen((event) async {
       if (!(event.isBlank ?? true)) {
-        bool isUserAdded = false;
-
-        for (var user in users) {
-          if (user.value.uid == event.docs.last.data()[UserJsonKey.uid]) {
-            isUserAdded = true;
-            return;
-          }
-        }
-
-        if (users.isEmpty || !isUserAdded) {
-          users.add((await getUserFromDataBase(
-              event.docs.last.data()[UserJsonKey.uid]))!);
-        }
+        users.value = [];
+        users.value = await getUsersFromDataBase(event.docs
+            .map((e) => (e.data()[UserJsonKey.uid] as String))
+            .toList());
       }
     });
+    // print(users);
     return users;
   }
 
-  Future<void> deleteUser(String uid) async {
-    final userRef = await getUserDucumentRefrance(uid);
-    if (userRef != null) {
-      userRef.delete();
-    }
-  }
+  // Future<void> deleteUser(String uid) async {
+  //   final userRef = await getUserDucumentRefrance(uid);
+  //   if (userRef != null) {
+  //     userRef.delete();
+  //   }
+  // }
 }

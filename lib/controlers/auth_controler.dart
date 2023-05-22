@@ -35,7 +35,7 @@ class AuthControler extends GetxController {
 
     FirebaseAuth.instance.authStateChanges().listen(
       (user) async {
-        print("lisining ${_isUserEmailVerified} ${_isUserEmailVerified}");
+        // print("lisining ${_isUserEmailVerified} ${_isUserEmailVerified}");
         // print("lisining auth");
         // user = FirebaseAuth.instance.currentUser;
         if (user == null) {
@@ -160,7 +160,7 @@ class AuthControler extends GetxController {
     _isLodding.value = true;
 
     logOut();
-    _fireStoreUserDataControler.deleteUser(uid);
+    // _fireStoreUserDataControler.deleteUser(uid);
 
     Get.snackbar("Info", "Deleted successfuly");
     _isLodding.value = false;

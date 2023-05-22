@@ -64,9 +64,10 @@ class ChatScreen extends StatelessWidget {
                       if (data != null) {
                         final chats = data;
                         data.listen((p0) {
-                          scrollControler
-                              .jumpTo(scrollControler.position.maxScrollExtent);
+                          scrollControler.jumpTo(
+                              scrollControler.position.maxScrollExtent + 100);
                         });
+
                         return GetX<FireStoreChatControler>(
                           builder: (controller) {
                             String prewusDate = "";
@@ -93,6 +94,8 @@ class ChatScreen extends StatelessWidget {
                                             .value
                                             .uid ==
                                         chats[index].sendBy;
+                                // print(
+                                //     "${Get.find<AuthControler>().currentUser!.value.email}  == ${chats[index].sendBy}");
 
                                 return Container(
                                   margin: const EdgeInsets.symmetric(
@@ -160,6 +163,10 @@ class ChatScreen extends StatelessWidget {
                                                       maxWidth: Get.width * 0.7,
                                                       minWidth: 30),
                                                   child: AppText(
+                                                    textAlign:
+                                                        isSendByCurrentUser
+                                                            ? TextAlign.end
+                                                            : TextAlign.start,
                                                     text: chats[index].message,
                                                     fontSize: 20,
                                                     maxLine: 10,
@@ -169,9 +176,9 @@ class ChatScreen extends StatelessWidget {
                                                   height: 3,
                                                 ),
                                                 AppText(
+                                                    textAlign: TextAlign.end,
                                                     fontSize: 12,
-                                                    color: const Color.fromARGB(
-                                                        255, 164, 185, 196),
+                                                    color: Colors.white,
                                                     text:
                                                         "${chats[index].dateTime.hour % 12} : ${chats[index].dateTime.minute} ${chats[index].dateTime.hour / 12 < 0 ? "am" : "pm"}")
                                               ],

@@ -23,8 +23,8 @@ class LoddingScreen extends StatelessWidget {
                   return const LoddingSplashScreen();
                 }
 
-                print(
-                    "build is login chack ${controller.isEmailVerified} ${controller.isUserLogin}");
+                // print(
+                //     "build is login chack ${controller.isEmailVerified} ${controller.isUserLogin}");
                 if (!controller.isUserLogin.value) {
                   // print("going to login screen");
                   return const LoginScreen();
