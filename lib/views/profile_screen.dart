@@ -179,9 +179,8 @@ class ProfileScreen extends StatelessWidget {
                         ? Column(
                             children: [
                               TextButton(
-                                onPressed: () async {
+                                onPressed: () {
                                   goBack(context);
-
                                   controller.logOut();
                                 },
                                 child: controller.isLodding.value

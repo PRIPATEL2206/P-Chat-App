@@ -35,6 +35,7 @@ class AuthControler extends GetxController {
 
     FirebaseAuth.instance.authStateChanges().listen(
       (user) async {
+        _isLodding.value = true;
         // print("lisining ${_isUserEmailVerified} ${_isUserEmailVerified}");
         // print("lisining auth");
         // user = FirebaseAuth.instance.currentUser;
@@ -56,6 +57,7 @@ class AuthControler extends GetxController {
         } catch (e) {
           Get.snackbar("error in user change", e.toString());
         }
+        _isLodding.value = false;
       },
       onError: (e) => Get.snackbar("error in lisining", e.toString()),
       onDone: () => _chatAppCurrentUser?.close(),
@@ -146,6 +148,7 @@ class AuthControler extends GetxController {
     if (_isUserLogin.value) {
       _isUserLogin.value = false;
       await StreamLisinerHelper.closeAllSubscription();
+      await Future.delayed(const Duration(seconds: 1));
       FirebaseAuth.instance.signOut();
       Get.snackbar("Auth Success", "Log out SuccessFully");
       _isLodding.value = false;

@@ -57,82 +57,87 @@ class ChatScreen extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: AppFutureBuilder(
-                  future: chatControler.getChatsOfGroup(group.value.gid),
-                  builder: (isCompleted, data) {
-                    if (isCompleted) {
-                      if (data != null) {
-                        final chats = data;
-                        data.listen((p0) {
-                          scrollControler.jumpTo(
-                              scrollControler.position.maxScrollExtent + 100);
-                        });
+              child: Stack(
+                children: [
+                  AppFutureBuilder(
+                      future: chatControler.getChatsOfGroup(group.value.gid),
+                      builder: (isCompleted, data) {
+                        if (isCompleted) {
+                          if (data != null) {
+                            final chats = data;
+                            data.listen((p0) {
+                              scrollControler.jumpTo(
+                                  scrollControler.position.maxScrollExtent +
+                                      100);
+                            });
 
-                        return GetX<FireStoreChatControler>(
-                          builder: (controller) {
-                            String prewusDate = "";
-                            final todayDate =
-                                "${DateTime.now().day} / ${DateTime.now().month} / ${DateTime.now().year}";
-                            return ListView.builder(
-                              itemCount: chats.length,
-                              controller: scrollControler,
-                              itemBuilder: (context, index) {
-                                bool isDateShow = false;
-                                if (prewusDate !=
-                                        "${chats[index].dateTime.day} / ${chats[index].dateTime.month} / ${chats[index].dateTime.year}" &&
-                                    prewusDate != "Today") {
-                                  prewusDate =
-                                      "${chats[index].dateTime.day} / ${chats[index].dateTime.month} / ${chats[index].dateTime.year}";
-                                  if (prewusDate == todayDate) {
-                                    prewusDate = "Today";
-                                  }
-                                  isDateShow = true;
-                                }
-                                final isSendByCurrentUser =
-                                    Get.find<AuthControler>()
-                                            .currentUser!
-                                            .value
-                                            .uid ==
-                                        chats[index].sendBy;
-                                // print(
-                                //     "${Get.find<AuthControler>().currentUser!.value.email}  == ${chats[index].sendBy}");
+                            return GetX<FireStoreChatControler>(
+                              builder: (controller) {
+                                String prewusDate = "";
+                                final todayDate =
+                                    "${DateTime.now().day} / ${DateTime.now().month} / ${DateTime.now().year}";
+                                return ListView.builder(
+                                  itemCount: chats.length,
+                                  controller: scrollControler,
+                                  itemBuilder: (context, index) {
+                                    bool isDateShow = false;
+                                    if (prewusDate !=
+                                            "${chats[index].dateTime.day} / ${chats[index].dateTime.month} / ${chats[index].dateTime.year}" &&
+                                        prewusDate != "Today") {
+                                      prewusDate =
+                                          "${chats[index].dateTime.day} / ${chats[index].dateTime.month} / ${chats[index].dateTime.year}";
+                                      if (prewusDate == todayDate) {
+                                        prewusDate = "Today";
+                                      }
+                                      isDateShow = true;
+                                    }
+                                    final isSendByCurrentUser =
+                                        Get.find<AuthControler>()
+                                                .currentUser!
+                                                .value
+                                                .uid ==
+                                            chats[index].sendBy;
+                                    // print(
+                                    //     "${Get.find<AuthControler>().currentUser!.value.email}  == ${chats[index].sendBy}");
 
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 3, vertical: 3),
-                                  child: Column(
-                                    children: [
-                                      isDateShow
-                                          ? Container(
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 3, vertical: 3),
+                                      child: Column(
+                                        children: [
+                                          isDateShow
+                                              ? Container(
+                                                  margin: const EdgeInsets
+                                                      .symmetric(vertical: 10),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
                                                       horizontal: 15,
                                                       vertical: 6),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.black87,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: AppText(text: prewusDate),
-                                            )
-                                          : Container(),
-                                      Row(
-                                        mainAxisAlignment: isSendByCurrentUser
-                                            ? MainAxisAlignment.end
-                                            : MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 5),
-                                            decoration: BoxDecoration(
-                                                color: isSendByCurrentUser
-                                                    ? Colors.teal
-                                                    : Colors.black54,
-                                                borderRadius:
-                                                    isSendByCurrentUser
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.black87,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  child:
+                                                      AppText(text: prewusDate),
+                                                )
+                                              : Container(),
+                                          Row(
+                                            mainAxisAlignment:
+                                                isSendByCurrentUser
+                                                    ? MainAxisAlignment.end
+                                                    : MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15,
+                                                        vertical: 5),
+                                                decoration: BoxDecoration(
+                                                    color: isSendByCurrentUser
+                                                        ? Colors.teal
+                                                        : Colors.black54,
+                                                    borderRadius: isSendByCurrentUser
                                                         ? BorderRadius.circular(
                                                                 10)
                                                             .copyWith(
@@ -143,68 +148,89 @@ class ChatScreen extends StatelessWidget {
                                                             .copyWith(
                                                                 topLeft: Radius
                                                                     .zero)),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  isSendByCurrentUser
-                                                      ? CrossAxisAlignment.end
-                                                      : CrossAxisAlignment
-                                                          .start,
-                                              children: [
-                                                !isSendByCurrentUser
-                                                    ? AppText(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      isSendByCurrentUser
+                                                          ? CrossAxisAlignment
+                                                              .end
+                                                          : CrossAxisAlignment
+                                                              .start,
+                                                  children: [
+                                                    !isSendByCurrentUser
+                                                        ? AppText(
+                                                            text: chats[index]
+                                                                .senderName,
+                                                            fontSize: 14,
+                                                            color: Colors
+                                                                .lightBlue,
+                                                          )
+                                                        : Container(),
+                                                    Container(
+                                                      constraints:
+                                                          BoxConstraints(
+                                                              maxWidth:
+                                                                  Get.width *
+                                                                      0.7,
+                                                              minWidth: 30),
+                                                      child: AppText(
+                                                        textAlign:
+                                                            isSendByCurrentUser
+                                                                ? TextAlign.end
+                                                                : TextAlign
+                                                                    .start,
                                                         text: chats[index]
-                                                            .senderName,
-                                                        fontSize: 14,
-                                                        color: Colors.lightBlue,
-                                                      )
-                                                    : Container(),
-                                                Container(
-                                                  constraints: BoxConstraints(
-                                                      maxWidth: Get.width * 0.7,
-                                                      minWidth: 30),
-                                                  child: AppText(
-                                                    textAlign:
-                                                        isSendByCurrentUser
-                                                            ? TextAlign.end
-                                                            : TextAlign.start,
-                                                    text: chats[index].message,
-                                                    fontSize: 20,
-                                                    maxLine: 10,
-                                                  ),
+                                                            .message,
+                                                        fontSize: 21,
+                                                        maxLine: 40,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 3,
+                                                    ),
+                                                    AppText(
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        fontSize: 12,
+                                                        color: Colors.white,
+                                                        text:
+                                                            "${chats[index].dateTime.hour % 12} : ${chats[index].dateTime.minute} ${chats[index].dateTime.hour / 12 < 0 ? "am" : "pm"}")
+                                                  ],
                                                 ),
-                                                const SizedBox(
-                                                  height: 3,
-                                                ),
-                                                AppText(
-                                                    textAlign: TextAlign.end,
-                                                    fontSize: 12,
-                                                    color: Colors.white,
-                                                    text:
-                                                        "${chats[index].dateTime.hour % 12} : ${chats[index].dateTime.minute} ${chats[index].dateTime.hour / 12 < 0 ? "am" : "pm"}")
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 );
                               },
                             );
-                          },
+                          }
+                          return const Center(
+                            child: AppText(
+                              text: "No Chat yet",
+                              color: Colors.grey,
+                            ),
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
-                      }
-                      return const Center(
-                        child: AppText(
-                          text: "No Chat yet",
-                          color: Colors.grey,
-                        ),
-                      );
-                    }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
+                      }),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      constraints:
+                          const BoxConstraints(maxWidth: 30, maxHeight: 20),
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      onPressed: () => scrollControler.jumpTo(
+                          scrollControler.position.maxScrollExtent + 100),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           Container(

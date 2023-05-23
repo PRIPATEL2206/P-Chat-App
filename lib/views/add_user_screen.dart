@@ -4,6 +4,7 @@ import 'package:pchat/controlers/firebase_firestore_groupdata.dart';
 import 'package:pchat/controlers/firebase_firestore_userdata_controler.dart';
 import 'package:pchat/helper/route_helper.dart';
 import 'package:pchat/models/group_model.dart';
+import 'package:pchat/models/user_model.dart';
 import 'package:pchat/views/profile_screen.dart';
 import 'package:pchat/widgets/app_dilog.dart';
 import 'package:pchat/widgets/app_future_builder.dart';
@@ -42,11 +43,22 @@ class AddUserScreen extends StatelessWidget {
             if (isCompleted && data != null) {
               return Obx(
                 () {
-                  final users = data
-                      .where((element) =>
-                          element.value.name.contains(searchText.value) ||
-                          element.value.email.contains(searchText.value))
-                      .toList();
+                  final users = <Rx<ChatAppUser>>[].obs;
+                  for (var user in data) {
+                    bool isUniqe = true;
+                    for (var u in users) {
+                      if (u.value.uid == user.value.uid) {
+                        isUniqe = false;
+                        break;
+                      }
+                    }
+
+                    if (isUniqe &&
+                        (user.value.name.contains(searchText) ||
+                            user.value.email.contains(searchText))) {
+                      users.add(user);
+                    }
+                  }
 
                   // users.forEach((element) {
                   //   print(element.value.uid);
